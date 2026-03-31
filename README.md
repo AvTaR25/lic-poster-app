@@ -1,1 +1,0 @@
-# lic-poster-app
