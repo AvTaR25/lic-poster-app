@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIC Poster Maker Pro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f5;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            max-width: 420px;
+            margin: auto;
+        }
+        h2 { color: #003366; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #002244; }
+        #downloadBtn {
+            background-color: #28a745; /* Green color for download */
+            color: white;
+            margin-top: 15px;
+            display: none;
+        }
+        #downloadBtn:hover { background-color: #218838; }
+        canvas {
+            margin-top: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-width: 100%;
+            display: none;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>LIC Poster Maker</h2>
+    
+    <div class="input-group">
+        <label>Policy Ka Naam</label>
+        <input type="text" id="policyName" placeholder="उदा: Jeevan Anand">
+    </div>
+    <div class="input-group">
+        <label>Agent Ka Naam</label>
+        <input type="text" id="agentName" placeholder="उदा: Raju Gupta">
+    </div>
+    <div class="input-group">
+        <label>Mobile Number</label>
+        <input type="text" id="phone" placeholder="+91 0000000000">
+    </div>
+    <div class="input-group">
+        <label>Design Theme Chunein</label>
+        <select id="themeSelect">
+            <option value="classic">Classic Blue</option>
+            <option value="festive">Festive Gold</option>
+            <option value="modern">Modern Light</option>
+        </select>
+    </div>
+    
+    <button onclick="generatePoster()">Poster Banao</button>
+    
+    <canvas id="posterCanvas" width="400" height="500"></canvas>
+    
+    <button id="downloadBtn" onclick="downloadPoster()">⬇️ Poster Download Karein</button>
+</div>
+
+<script>
+    function generatePoster() {
+        const policyName = document.getElementById('policyName').value.toUpperCase() || 'LIC POLICY';
+        const agentName = document.getElementById('agentName').value || 'LIC Agent';
+        const phone = document.getElementById('phone').value || '+91 0000000000';
+        const theme = document.getElementById('themeSelect').value;
+
+        const canvas = document.getElementById('posterCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.style.display = 'block';
+        document.getElementById('downloadBtn').style.display = 'block';
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let bgColor, topColor, textColor1, textColor2, accentColor;
+
+        if (theme === 'classic') {
+            bgColor = '#003366'; topColor = '#FFCC00'; textColor1 = '#FFFFFF'; textColor2 = '#003366'; accentColor = '#FFCC00';
+        } else if (theme === 'festive') {
+            bgColor = '#8B0000'; topColor = '#FFD700'; textColor1 = '#FFFFFF'; textColor2 = '#8B0000'; accentColor = '#FFD700';
+        } else if (theme === 'modern') {
+            bgColor = '#F0F8FF'; topColor = '#005b96'; textColor1 = '#333333'; textColor2 = '#FFFFFF'; accentColor = '#005b96';
+        }
+
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = topColor;
+        ctx.fillRect(0, 0, canvas.width, 90);
+        
+        ctx.fillStyle = textColor2;
+        ctx.font = 'bold 34px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('LIC of India', canvas.width / 2, 45);
+        
+        ctx.font = 'italic 16px Arial';
+        ctx.fillText('Zindagi Ke Saath Bhi, Zindagi Ke Baad Bhi', canvas.width / 2, 75);
+
+        ctx.fillStyle = accentColor;
+        ctx.fillRect(20, 130, 360, 80);
+        ctx.fillStyle = (theme === 'modern') ? '#FFFFFF' : textColor2;
+        ctx.font = 'bold 36px Arial';
+        ctx.fillText(policyName, canvas.width / 2, 182);
+
+        ctx.fillStyle = textColor1;
+        ctx.font = 'bold 22px Arial';
+        ctx.fillText('Key Benefits', canvas.width / 2, 260);
+
+        ctx.font = '18px Arial';
+        ctx.textAlign = 'left';
+        const checkMark = (theme === 'classic') ? '⭐' : '✔';
+        ctx.fillText(checkMark + ' Secure Your Family Future', 50, 300);
+        ctx.fillText(checkMark + ' Guaranteed Maturity Returns', 50, 340);
+        ctx.fillText(checkMark + ' Tax Benefits Under 80C', 50, 380);
+
+        ctx.beginPath();
+        ctx.moveTo(30, 415);
+        ctx.lineTo(370, 415);
+        ctx.strokeStyle = accentColor;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = accentColor;
+        ctx.font = 'bold 22px Arial';
+        ctx.fillText('Contact: ' + agentName, canvas.width / 2, 450);
+        
+        ctx.fillStyle = textColor1;
+        ctx.font = '20px Arial';
+        ctx.fillText('📞 ' + phone, canvas.width / 2, 480);
+    }
+
+    function downloadPoster() {
+        const canvas = document.getElementById('posterCanvas');
+        const link = document.createElement('a');
+        link.download = 'LIC_Poster.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+</script>
+
+</body>
+</html>
